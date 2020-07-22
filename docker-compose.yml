@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+    mongodb:
+        image: mongo
+        restart: always
+        ports: 
+            - "27017:27017"
+        volumes: 
+            - "./db:/data/db/"
+
+    nodejs:
+        image: node:12-alpine
+        restart: always
+        ports: 
+            - "3000:3000"
+        volumes:
+            - "./app:/opt/app"
+        working_dir: /opt/app/
+        # command: npm install
+        command: >
+            sh -c "./check-bash.sh &&
+            ./wait-for-it.sh mongodb:27017 &&
+            npm run dev
+            "
+        depends_on:
+            - "mongodb"
