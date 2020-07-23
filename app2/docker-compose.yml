@@ -6,19 +6,18 @@ services:
         ports: 
             - "27017:27017"
         volumes: 
-            - "./db:/data/db/"
+            - "../db:/data/db/"
 
     nodejs:
-        image: node:12-alpine
+        build: .
         restart: always
         ports: 
             - "3000:3000"
         volumes:
-            - "./app:/opt/app"
+            - "../app2:/opt/app"
         working_dir: /opt/app/
-        # command: npm install
         command: >
-            sh -c "./check-bash.sh &&
+            sh -c "ls -l &&
             ./wait-for-it.sh mongodb:27017 &&
             npm run dev
             "
